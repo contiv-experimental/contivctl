@@ -23,7 +23,7 @@ func main() {
 		{
 			Name:        "vol",
 			Usage:       "Control volplugin",
-			Flags:       volcli.VolmasterFlags,
+			Flags:       volcli.GlobalFlags,
 			Subcommands: volcli.Commands,
 		},
 	}
