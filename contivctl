@@ -1,0 +1,58 @@
+#!/bin/bash
+
+VERSION=0.0.1
+URL=http://contiv.io 
+
+showhelp() {
+    cat 1>&2 <<EOF
+contivctl - manage contiv control plane
+
+VERSION: ${VERSION}
+
+Commands:
+
+  - network <arguments>: control contiv network
+  - storage <arguments>: control contiv storage
+  - cluster <arguments>: control contiv cluster
+EOF
+    exit 1
+}
+
+missingcommand() {
+  cat 1>&2 <<EOF
+It looks like you're missing the tool '$1'! Please visit
+${URL} for more information on how to install it.
+EOF
+  exit 2
+}
+
+check() {
+  local cmd=$1
+  which $cmd &>/dev/null || missingcommand $cmd
+}
+
+if [ "x$1" = "x" ]
+then
+  showhelp
+fi
+
+case "$1" in
+  network)
+    shift
+    check netctl
+    netctl "$*"
+  ;;
+  storage)
+    shift
+    check volcli
+    volcli "$*"
+  ;;
+  cluster)
+    shift
+    check clusterctl
+    clusterctl "$*"
+  ;;
+  *)
+    showhelp
+  ;;
+esac
